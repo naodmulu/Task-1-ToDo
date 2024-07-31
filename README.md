@@ -1,4 +1,4 @@
-# Task Manager
+# TODO list
 
 A simple web-based Task Manager application that allows users to add, edit, and delete tasks. Tasks are stored in the browser's local storage, ensuring they persist across page reloads.
 
