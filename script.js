@@ -1,28 +1,16 @@
 let tasks = [];
 
-window.onload = function() {
-    if (localStorage.getItem('tasks')) {
-        tasks = JSON.parse(localStorage.getItem(tasks));
-        render();
-    }
-}
-
-function saveTasks() {
-    localStorage.setItem('task', JSON.stringify(tasks));
-}
 function task() {
     let temp = document.getElementById("taskInput").value;
     if (temp) { 
         tasks.push(temp);
         document.getElementById("taskInput").value = ''; 
-        saveTasks();
         render();
     }
 }
 
 function deleteTask(i) {
     tasks.splice(i, 1);
-    saveTasks();
     render();
 }
 
@@ -30,7 +18,6 @@ function edit(index) {
     let temp = document.getElementById("editInput" + index).value;
     if (temp) { 
         tasks[index] = temp;
-        saveTasks();
         render();
     }
 }
@@ -42,11 +29,13 @@ function editTask(index) {
     let editSave = document.createElement("button");
 
     editInput.id = "editInput" + index;
+    editInput.value = tasks[index];
+
     editSave.innerText = "Save";
     editSave.onclick = function() {
         edit(index);
     };
-
+    container.innerHTML = '';
     container.appendChild(editInput);
     container.appendChild(editSave);
 }
@@ -55,26 +44,33 @@ function renderTask() {
     let tasksListView = document.createElement("div");
     for (let i = 0; i < tasks.length; i++) {
         let container = document.createElement('div');
+        let information = document.createElement('p');
         let editButton = document.createElement('button');
         let deleteButton = document.createElement('button');
 
-        container.innerText = tasks[i];
+        // container.innerText = tasks[i];
         container.id = "taskContainer" + i;
-        deleteButton.innerText = 'Delete';
-        editButton.innerText = 'Edit';
+        container.className = 'taskContainer';
 
+        information.textContent = tasks[i];
+        information.className = "information"
+
+        deleteButton.innerText = 'Delete';
+        deleteButton.className = 'deleteButton';
         deleteButton.onclick = (function(index) {
             return function() {
                 deleteTask(index);
             };
         })(i);
-
+        
+        editButton.innerText = 'Edit';
         editButton.onclick = (function(index) {
             return function() {
                 editTask(index);
             };
         })(i);
         
+        container.appendChild(information)
         container.appendChild(deleteButton);
         container.appendChild(editButton);
         tasksListView.appendChild(container);
